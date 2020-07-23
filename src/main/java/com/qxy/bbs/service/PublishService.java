@@ -61,9 +61,8 @@ public class PublishService {
      */
     public WebReslut<Publish> create(Publish publish){
         try{
-            int id = publishDao.insert(publish);
-            publish.setId(id);
             publish.setUpdateTime(new Date());
+            publishDao.insert(publish);
             return WebReslut.success(publish);
         }catch (Exception e){
             log.info("插入新公告出错：{}",e.toString());

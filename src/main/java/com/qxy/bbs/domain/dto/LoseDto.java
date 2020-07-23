@@ -19,6 +19,8 @@ public class LoseDto {
 
     private String userName;
 
+    private String avtar;
+
     private String title;
 
     private Date updateTime;

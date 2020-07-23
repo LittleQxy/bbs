@@ -12,6 +12,7 @@
         <result column="createTime" property="createTime"/>
         <result property="updateTime" column="updateTime"/>
         <result property="userName" column="userName"/>
+        <result property="avaterUrl" column="avaterUrl"/>
     </resultMap>
 
     <select id="select" resultMap="lose">
@@ -23,10 +24,10 @@
         = #{updateTime},watchNum = #{watchNum},getLikeNum = {#getLikeNum} where id = #{id}
     </update>
 
-    <insert id="insert" parameterType="com.qxy.bbs.domain.po.LostModule">
-        insert into lose(userid,articleType,title,content,watchNum,getLikeNum,createTime,updateTime,userName)
+    <insert id="insert" parameterType="com.qxy.bbs.domain.po.LostModule" useGeneratedKeys="true" keyProperty="id">
+        insert into lose(userid,articleType,title,content,watchNum,getLikeNum,createTime,updateTime,userName,avaterUrl)
         values
-        (#{userId},#{articleType},#{title},#{content},#{watchNum},#{getLikeNum},#{createTime},#{updateTime},#{userName})
+        (#{userId},#{articleType},#{title},#{content},#{watchNum},#{getLikeNum},#{createTime},#{updateTime},#{userName},#{avaterUrl})
     </insert>
 
     <delete id="delete">
@@ -36,6 +37,10 @@
     <select id="selectByPage" parameterType="com.qxy.bbs.common.domain.PageDto"
             resultType="com.qxy.bbs.domain.po.LostModule">
         select * from lose order by updateTime desc,getLikeNum desc limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(*) from lose;
     </select>
 
 </mapper>

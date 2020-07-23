@@ -11,7 +11,7 @@
         <result property="leixing" column="leixing"/>
     </resultMap>
 
-    <insert id="insert" parameterType="com.qxy.bbs.domain.po.Publish">
+    <insert id="insert" parameterType="com.qxy.bbs.domain.po.Publish" useGeneratedKeys="true" keyProperty="id">
         insert into publish(title,content,leixing,createTime,updateTime) values (#{title},#{content},#{leixing},#{createTime},#{updateTime})
     </insert>
 

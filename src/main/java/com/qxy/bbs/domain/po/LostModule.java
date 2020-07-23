@@ -27,4 +27,7 @@ public class LostModule {
     private Integer getLikeNum;
     //浏览量
     private Integer watchNum;
+
+    //用户头像
+    private String avaterUrl;
 }

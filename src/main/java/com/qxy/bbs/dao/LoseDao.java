@@ -30,5 +30,8 @@ public interface LoseDao {
     //分页选择帖子
     List<LostModule> selectByPage(PageDto pageDto);
 
+    //获取总共帖子数量
+    int getCount();
+
 
 }

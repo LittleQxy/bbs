@@ -17,6 +17,8 @@ public class WebReslut<T> {
 
     private T Data;
 
+    private int total;
+
     public WebReslut() {
     }
 

@@ -1,6 +1,8 @@
 package com.qxy.bbs.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.qxy.bbs.common.domain.PageDto;
+import com.qxy.bbs.common.domain.RedisKey;
 import com.qxy.bbs.common.domain.WebReslut;
 import com.qxy.bbs.dao.LoseDao;
 import com.qxy.bbs.dao.UserInfoDao;
@@ -9,6 +11,8 @@ import com.qxy.bbs.domain.po.LostModule;
 import com.qxy.bbs.domain.po.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,6 +32,9 @@ public class LoseService {
 
     @Autowired
     UserInfoDao userInfoDao;
+
+    @Autowired
+    RedisTemplate redisTemplate;
 
     /**
      * 获取当前模块的一页数据，默认按照更新时间和点赞数量排序
@@ -53,9 +60,14 @@ public class LoseService {
                     loseDto.setUpdateTime(module.getUpdateTime());
                     loseDto.setUserId(module.getUserId());
                     loseDto.setUserName(module.getUserName());
+                    loseDto.setAvtar(module.getAvaterUrl());
                     loseDtos.add(loseDto);
                 }
-                return WebReslut.success(loseDtos);
+                int total = loseDao.getCount();
+                log.info("获取帖子总数量为：{}",total+"");
+                WebReslut res = WebReslut.success(loseDtos);
+                res.setTotal(total);
+                return res;
             }
         } catch (Exception e) {
             log.error("选择分页失败：{}", e.toString());
@@ -84,8 +96,10 @@ public class LoseService {
             userInfoDao.update(info);
             //设置用户名
             lostModule.setUserName(info.getUserName());
-            int id = loseDao.insert(lostModule);
-            log.info("插入后返回值为：{}", id);
+            lostModule.setAvaterUrl(info.getAvtarUrl());
+            loseDao.insert(lostModule);
+            //插入Redis中
+            RedisNewSave(lostModule);
             return WebReslut.success(lostModule);
         } catch (Exception e) {
             log.error("创建帖子出错：{}", e.toString());
@@ -120,6 +134,7 @@ public class LoseService {
     public WebReslut edit(LostModule lostModule) {
         log.info("帖子编辑后的内容为：{}", lostModule.toString());
         try {
+            lostModule.setUpdateTime(new Date());
             loseDao.update(lostModule);
             return WebReslut.success(lostModule);
         } catch (Exception e) {
@@ -146,6 +161,21 @@ public class LoseService {
             return WebReslut.failed(2008, "删除帖子出错");
         }
         return WebReslut.failed(2009, "空指针异常");
+    }
+
+    /**
+     * 将最新创建的帖子存放到Redis list中
+     * @param lostModule
+     */
+    public void RedisNewSave(LostModule lostModule){
+        ListOperations lop = redisTemplate.opsForList();
+        String info = JSONObject.toJSONString(lostModule);
+        log.info("最新创建的帖子信息为：{}",info);
+        try{
+            lop.leftPush(RedisKey.HotArticleKey,info);
+        }catch (Exception e){
+            log.info("插入Redis list失败,插入信息；{},错误信息：{}",info,e.toString());
+        }
     }
 
 }
