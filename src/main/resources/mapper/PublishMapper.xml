@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qxy.bbs.dao.PublishDao">
+
+    <resultMap id="publish" type="com.qxy.bbs.domain.po.Publish">
+        <id property="id" column="id"></id>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="createTime"/>
+        <result property="updateTime" column="updateTime"/>
+        <result property="leixing" column="leixing"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.qxy.bbs.domain.po.Publish">
+        insert into publish(title,content,leixing,createTime,updateTime) values (#{title},#{content},#{leixing},#{createTime},#{updateTime})
+    </insert>
+
+    <update id="update" parameterType="com.qxy.bbs.domain.po.Publish">
+        update publish set title=#{title},content = #{content},updateTime = #{updateTime} where id = #{id} ;
+    </update>
+
+    <select id="selectList"  resultMap="publish">
+        select * from publish where leixing = #{leixing} order by updateTime desc limit #{pageNum},#{pageSize}
+    </select>
+
+    <delete id="delete">
+        delete from publish where id = #{id}
+    </delete>
+
+    <select id="getPublishNum" resultType="int">
+        select count(*) from publish where leixing = #{leixing};
+    </select>
+
+    <select id="getPublishById" resultType="com.qxy.bbs.domain.po.Publish">
+        select * from publish where id = #{id}
+    </select>
+</mapper>

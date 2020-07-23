@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qxy.bbs.dao.UserInfoDao">
+
+    <resultMap id="userinfo" type="com.qxy.bbs.domain.po.UserInfo">
+        <id property="id" column="id"></id>
+        <result property="userId" column="userid"/>
+        <result property="phoneNumber" column="phoneNumber"/>
+        <result property="age" column="age"/>
+        <result property="userName" column="userName"/>
+        <result property="selfcontent" column="selfContent" javaType="string" jdbcType="LONGVARCHAR"></result>
+        <result property="totalArticleNum" column="totalArticleNum"/>
+        <result property="getLikeNum" column="getLikeNum"></result>
+        <result property="email" column="email"/>
+        <result property="avtarUrl" column="avtarUrl"/>
+    </resultMap>
+
+    <select id="select" resultType="com.qxy.bbs.domain.po.UserInfo">
+        select * from userinfo where userid = #{userId}
+    </select>
+
+    <insert id="insert" parameterType="com.qxy.bbs.domain.po.UserInfo">
+        insert into userinfo(userid,phoneNumber,age,userName,selfContent,totalArticleNum,getLikeNum,email,avtarUrl)
+        values
+        (#{userId},#{phoneNumber},#{age},#{userName},#{selfcontent},#{totalArticleNum},#{getLikeNum},#{email},#{avtarUrl})
+    </insert>
+
+    <update id="update" parameterType="com.qxy.bbs.domain.po.UserInfo">
+        update userinfo set phoneNumber = #{phoneNumber},age = #{age},userName = #{userName},selfContent =
+        #{selfcontent},
+        avtarUrl = #{avtarUrl} where id = #{id}
+    </update>
+
+    <delete id="delete">
+        delete from userinfo where userid = #{id}
+    </delete>
+
+</mapper>
