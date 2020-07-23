@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qxy.bbs.dao.LoseDao">
+    <resultMap id="lose" type="com.qxy.bbs.domain.po.LostModule">
+        <id property="id" column="id"/>
+        <result property="userId" column="userid"/>
+        <result property="articleType" column="articleType"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="watchNum" column="watchNum"/>
+        <result property="getLikeNum" column="getLikeNum"/>
+        <result column="createTime" property="createTime"/>
+        <result property="updateTime" column="updateTime"/>
+        <result property="userName" column="userName"/>
+    </resultMap>
+
+    <select id="select" resultMap="lose">
+        select * from lose where id = #{id}
+    </select>
+
+    <update id="update" parameterType="com.qxy.bbs.domain.po.LostModule">
+        update lose set title = #{title},content = #{content},createTime = #{createTime},updateTime
+        = #{updateTime},watchNum = #{watchNum},getLikeNum = {#getLikeNum} where id = #{id}
+    </update>
+
+    <insert id="insert" parameterType="com.qxy.bbs.domain.po.LostModule">
+        insert into lose(userid,articleType,title,content,watchNum,getLikeNum,createTime,updateTime,userName)
+        values
+        (#{userId},#{articleType},#{title},#{content},#{watchNum},#{getLikeNum},#{createTime},#{updateTime},#{userName})
+    </insert>
+
+    <delete id="delete">
+        delete from lose where id = #{id}
+    </delete>
+
+    <select id="selectByPage" parameterType="com.qxy.bbs.common.domain.PageDto"
+            resultType="com.qxy.bbs.domain.po.LostModule">
+        select * from lose order by updateTime desc,getLikeNum desc limit #{pageNum},#{pageSize}
+    </select>
+
+</mapper>
