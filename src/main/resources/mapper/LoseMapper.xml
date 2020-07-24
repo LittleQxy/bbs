@@ -13,6 +13,7 @@
         <result property="updateTime" column="updateTime"/>
         <result property="userName" column="userName"/>
         <result property="avaterUrl" column="avaterUrl"/>
+        <result property="conmentNum" column="conmentNum"/>
     </resultMap>
 
     <select id="select" resultMap="lose">
@@ -21,13 +22,13 @@
 
     <update id="update" parameterType="com.qxy.bbs.domain.po.LostModule">
         update lose set title = #{title},content = #{content},createTime = #{createTime},updateTime
-        = #{updateTime},watchNum = #{watchNum},getLikeNum = {#getLikeNum} where id = #{id}
+        = #{updateTime},watchNum = #{watchNum},getLikeNum = {#getLikeNum},conmentNum = #{conmentNum} where id = #{id}
     </update>
 
     <insert id="insert" parameterType="com.qxy.bbs.domain.po.LostModule" useGeneratedKeys="true" keyProperty="id">
-        insert into lose(userid,articleType,title,content,watchNum,getLikeNum,createTime,updateTime,userName,avaterUrl)
+        insert into lose(userid,articleType,title,content,watchNum,getLikeNum,createTime,updateTime,userName,avaterUrl,conmentNum)
         values
-        (#{userId},#{articleType},#{title},#{content},#{watchNum},#{getLikeNum},#{createTime},#{updateTime},#{userName},#{avaterUrl})
+        (#{userId},#{articleType},#{title},#{content},#{watchNum},#{getLikeNum},#{createTime},#{updateTime},#{userName},#{avaterUrl},#{conmentNum})
     </insert>
 
     <delete id="delete">

@@ -11,11 +11,13 @@ import java.util.Date;
  * @create 2020/7/3 16:13
  */
 @Data
-public class LoseDto {
+public class ArticleDto {
 
     private Integer id;
 
     private Integer userId;
+
+    private Integer type;
 
     private String userName;
 
@@ -23,8 +25,14 @@ public class LoseDto {
 
     private String title;
 
-    private Date updateTime;
+    private String updateTime;
 
     private Integer getLikeNum;
+
+    private Integer conmentNum;
+
+    private String content;
+
+    private Integer getWatchNum;
 
 }

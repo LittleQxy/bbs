@@ -30,4 +30,7 @@ public class LostModule {
 
     //用户头像
     private String avaterUrl;
+
+    //评论数量
+    private Integer conmentNum;
 }

@@ -8,6 +8,7 @@ import com.qxy.bbs.domain.dto.UserInfoDto;
 import com.qxy.bbs.domain.po.Publish;
 import com.qxy.bbs.domain.po.UserInfo;
 import com.qxy.bbs.service.PublishService;
+import com.qxy.bbs.service.RedisService;
 import com.qxy.bbs.service.UserInfoService;
 import jdk.nashorn.internal.parser.JSONParser;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,8 @@ public class HomeController {
 
     @Autowired
     PublishService publishService;
+    @Autowired
+    RedisService redisService;
 
 
     //请求个人主页展示的路径
@@ -73,6 +76,17 @@ public class HomeController {
         return  publishService.delete(id);
     }
 
-
+    @PostMapping("/getNewPublish")
+    public WebReslut getNewPublish(@RequestBody PageDto pageDto){
+        int beg = (pageDto.getPageNum()-1)*pageDto.getPageSize();
+        int end = beg+pageDto.getPageSize();
+        log.info("获取最新发布的分页请求，beg={},end={}",beg,end);
+        try {
+            return redisService.newPublishArticle(beg,end);
+        }catch (Exception e){
+            log.info("获取分页请求失败：{}",e.toString());
+        }
+        return WebReslut.failed(2000,"获取分页请求失败");
+    }
 
 }

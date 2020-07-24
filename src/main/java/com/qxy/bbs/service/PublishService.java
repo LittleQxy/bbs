@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,11 +47,19 @@ public class PublishService {
             log.info("获取公告的起始位置：beg=:{},end=:{}",beg,end);
 //            List<Publish> list = publishDao.selectList(beg,end,type);
             ListOperations op = redisTemplate.opsForList();
-            List<String> info = op.range(RedisKey.publishKey,beg,end);
             List<Publish> list = new ArrayList<>();
-            for(String s:info){
-                Publish publish = JSONObject.parseObject(s,Publish.class);
-                list.add(publish);
+            if(type == 1){
+                List<String> info = op.range(RedisKey.publishKey,beg,end);
+                for(String s:info){
+                    Publish publish = JSONObject.parseObject(s,Publish.class);
+                    list.add(publish);
+                }
+            }else{
+                List<String> info = op.range(RedisKey.Tongzhikey,beg,end);
+                for(String s:info){
+                    Publish publish = JSONObject.parseObject(s,Publish.class);
+                    list.add(publish);
+                }
             }
             page.setContent(list);
             log.info("获取公告的列表结果为：{}",list == null?null:list);
@@ -79,7 +86,7 @@ public class PublishService {
             publish.setUpdateTime(new Date());
             publishDao.insert(publish);
             //将公告数据写入Redis
-            insertIntoRedis(publish);
+            insertIntoRedis(publish,publish.getLeixing());
             return WebReslut.success(publish);
         }catch (Exception e){
             log.info("插入新公告出错：{}",e.toString());
@@ -94,8 +101,9 @@ public class PublishService {
      */
     public WebReslut<Boolean> delete(int id){
         try{
+            Publish publish = publishDao.getPublishById(id);
+            refreshRedis(publish.getLeixing());
             publishDao.delete(id);
-            refreshRedis();
             return WebReslut.success(true);
         }catch (Exception e){
             log.info("删除公告信息出错：{}",e.toString());
@@ -116,7 +124,7 @@ public class PublishService {
             int id = publish.getId();
             Publish newPublish = publishDao.getPublishById(id);
             //更新Redis缓存
-            refreshRedis();
+            refreshRedis(publish.getLeixing());
             return WebReslut.success(newPublish);
         }catch (Exception e){
             log.info("更新公告失败：{}",e.toString());
@@ -128,12 +136,16 @@ public class PublishService {
      * 将公告写Redis的list中
      * @param publish
      */
-    public void insertIntoRedis(Publish publish){
+    public void insertIntoRedis(Publish publish,int type){
         ListOperations lop = redisTemplate.opsForList();
         String info = JSONObject.toJSONString(publish);
         log.info("要插入Redis list中的公告信息为：{}",info);
         try{
-            lop.leftPush(RedisKey.publishKey,info);
+            if(type == 1){
+                lop.leftPush(RedisKey.publishKey,info);
+            }else {
+                lop.leftPush(RedisKey.Tongzhikey,info);
+            }
         }catch (Exception e){
             log.info("插入Redis list 报错：{}",e.toString());
         }
@@ -142,16 +154,20 @@ public class PublishService {
     /**
      * 当有公告被编辑的时候，缓存失效，更新Redis的缓存
      */
-    public void refreshRedis(){
+    public void refreshRedis(int type){
        try{
            redisTemplate.delete(RedisKey.publishKey);
            ListOperations lop = redisTemplate.opsForList();
-           int total = publishDao.getPublishNum(1);
-           List<Publish> list = publishDao.selectList(0,total,1);
+           int total = publishDao.getPublishNum(type);
+           List<Publish> list = publishDao.selectList(0,total,type);
            log.info("获取全部公告信息：{}");
            for(Publish p:list){
                String info = JSONObject.toJSONString(p);
-               lop.rightPush(RedisKey.publishKey,info);
+               if(type == 1){
+                   lop.rightPush(RedisKey.Tongzhikey,info);
+               }else{
+                   lop.rightPush(RedisKey.publishKey,info);
+               }
            }
        }catch (Exception e){
            log.info("更新缓存出错：{}",e.toString());

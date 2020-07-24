@@ -2,7 +2,7 @@ package com.qxy.bbs.controller;
 
 import com.qxy.bbs.common.domain.PageDto;
 import com.qxy.bbs.common.domain.WebReslut;
-import com.qxy.bbs.domain.dto.LoseDto;
+import com.qxy.bbs.domain.dto.ArticleDto;
 import com.qxy.bbs.domain.po.LostModule;
 import com.qxy.bbs.service.LoseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class LoseController {
     LoseService loseService;
 
     @RequestMapping("/list")
-    public WebReslut<List<LoseDto>> getByPage(@RequestBody PageDto pageDto) {
+    public WebReslut<List<ArticleDto>> getByPage(@RequestBody PageDto pageDto) {
         return loseService.getByPage(pageDto);
     }
 
@@ -35,8 +35,8 @@ public class LoseController {
     }
 
     @RequestMapping("/detail")
-    public WebReslut<LostModule> detail(@RequestBody LoseDto loseDto) {
-        return loseService.detail(loseDto);
+    public WebReslut<LostModule> detail(@RequestBody ArticleDto articleDto) {
+        return loseService.detail(articleDto);
     }
 
     @RequestMapping("/edit")
@@ -45,8 +45,8 @@ public class LoseController {
     }
 
     @PostMapping("/delete")
-    public WebReslut delete(@RequestBody LoseDto loseDto) {
-        return loseService.delete(loseDto.getId());
+    public WebReslut delete(@RequestBody ArticleDto articleDto) {
+        return loseService.delete(articleDto.getId());
     }
 
 
