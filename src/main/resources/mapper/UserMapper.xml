@@ -7,7 +7,7 @@
         <result property="password" column="password"/>
     </resultMap>
 
-    <insert id="insert" parameterType="com.qxy.bbs.domain.po.User">
+    <insert id="insert" parameterType="com.qxy.bbs.domain.po.User" keyProperty="id" useGeneratedKeys="true">
         insert into user(email,password) values (#{email},#{password})
     </insert>
 

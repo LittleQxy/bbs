@@ -2,12 +2,16 @@ package com.qxy.bbs.service;
 
 import com.qxy.bbs.common.domain.WebReslut;
 import com.qxy.bbs.common.utils.MD5Utils;
+import com.qxy.bbs.common.utils.TokenUtils;
 import com.qxy.bbs.dao.UserDao;
 import com.qxy.bbs.dao.UserInfoDao;
 import com.qxy.bbs.domain.po.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author qixiangyang5
@@ -23,7 +27,7 @@ public class UserService {
     @Autowired
     UserInfoDao userInfoDao;
 
-    public WebReslut<User> regist(User user) {
+    public WebReslut regist(User user) {
         User newuser = userDao.select(user.getEmail());
         if (newuser != null) {//说明用户已经存在
             return WebReslut.failed(2003, "用户已存在");
@@ -32,21 +36,27 @@ public class UserService {
             String password = user.getPassword();
             user.setPassword(MD5Utils.md5(password));
             userDao.insert(user);
-            User user1 = userDao.select(user.getEmail());
-            return WebReslut.success(user1);
+            String token = TokenUtils.sign(user);
+            Map<String,String> map = new HashMap<>();
+            map.put("token",token);
+            return WebReslut.success(map);
         } catch (Exception e) {
             log.error("创建用户出错：{}", e.toString());
         }
         return WebReslut.failed(2003, "创建用户出错");
     }
 
-    public WebReslut<User> login(String email, String password) {
+    public WebReslut login(String email, String password) {
         try {
             User user = userDao.select(email);
             if (user != null) {
+                //生成一个token
                 String pd = MD5Utils.md5(password);
                 if (pd.equals(user.getPassword())) {
-                    return WebReslut.success(user);
+                    String token = TokenUtils.sign(user);
+                    Map<String,String> map = new HashMap<>();
+                    map.put("token",token);
+                    return WebReslut.success(map);
                 }
                 return WebReslut.failed(20002, "密码错误");
             }
