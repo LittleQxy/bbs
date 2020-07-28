@@ -65,7 +65,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                     throw new NotLoginException("用户不存在，请重新登录");
                 }
                 // 验证 token
-
                 return TokenUtils.verify(token);
             }
         }

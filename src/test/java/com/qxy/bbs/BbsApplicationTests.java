@@ -30,8 +30,8 @@ class BbsApplicationTests {
 //        lostModule.setUpdateTime(new Date());
 //        ops.set("lose", JSONObject.toJSON(lostModule));
 //        System.out.println(JSONObject.parseObject(ops.get("lose").toString(),LostModule.class));
-        redisTemplate.delete(RedisKey.NewArticleKey);
-
+          Date date = new Date();
+        System.out.println(DateUtils.changeDate(date));
 
     }
 

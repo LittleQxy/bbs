@@ -16,7 +16,7 @@ import java.util.Date;
 public class DateUtils {
 
     public static String changeDate(Date date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         String dateString = simpleDateFormat.format(date);
 

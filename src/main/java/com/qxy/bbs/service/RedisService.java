@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +24,13 @@ public class RedisService {
 
     @Autowired
     RedisTemplate redisTemplate;
+
+    /**
+     * 用于给新用户名称赋予默认值
+     */
+    public static final String userID = "userID";
+
+    public static  boolean flag = false;
 
     /**
      * 获取最新发布的文章
@@ -64,6 +72,17 @@ public class RedisService {
         }catch (Exception e){
             log.info("插入Redis list失败,插入信息；{},错误信息：{}",info,e.toString());
         }
+    }
+
+    public Integer GetUserName(){
+        ValueOperations op = redisTemplate.opsForValue();
+        if(!flag){
+            op.set(userID,0);
+        }else{
+            op.increment(userID);
+            return (Integer) op.get(userID);
+        }
+        return 0;
     }
 }
 

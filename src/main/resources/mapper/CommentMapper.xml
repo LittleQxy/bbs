@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qxy.bbs.dao.CommentDao">
+
+    <resultMap id="comment" type="com.qxy.bbs.domain.po.Comment">
+        <id column="id" property="id"></id>
+        <result property="userId" column="userid"/>
+        <result property="articleType" column="articleType"/>
+        <result property="articleId" column="articleid"/>
+        <result property="content" column="content" />
+        <result property="createTime" column="createTime"/>
+        <result property="getLikeNum" column="getLikeNum"/>
+        <result property="userName" column="userName"/>
+        <result property="avtarUrl" column="avtarUrl"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.qxy.bbs.domain.po.Comment" useGeneratedKeys="true" keyProperty="id">
+        insert into comment(userid,articleType,articleid,content,createTime,getLikeNum,userName,avtarUrl) values (
+        #{userId},#{articleType},#{articleId},#{content},#{createTime},#{getLikeNum},#{userName},#{avtarUrl}
+        )
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        delete from comment where id = #{id}
+    </delete>
+
+    <select id="getComment" resultType="com.qxy.bbs.domain.po.Comment">
+        select * from comment where articleid = #{articleId} and articleType = #{articleType} order by createTime desc limit #{beg},#{end}
+    </select>
+
+</mapper>

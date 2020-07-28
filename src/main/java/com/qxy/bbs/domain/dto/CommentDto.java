@@ -1,19 +1,15 @@
-package com.qxy.bbs.domain.po;
+package com.qxy.bbs.domain.dto;
 
 import lombok.Data;
-import org.springframework.data.relational.core.sql.In;
 
 import java.util.Date;
 
 /**
- * 一级评论
- *
  * @author qixiangyang5
- * @create 2020/7/2 14:25
+ * @create 2020/7/27 20:06
  */
-
 @Data
-public class Comment {
+public class CommentDto {
 
     private Integer id;
 
@@ -24,7 +20,7 @@ public class Comment {
     //评论的用户
     private Integer userId;
     //创建时间
-    private Date createTime;
+    private String createTime;
     //评论内容
     private String content;
     //点赞数量
@@ -33,5 +29,4 @@ public class Comment {
     private String userName;
 
     private String avtarUrl;
-
 }

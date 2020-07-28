@@ -5,7 +5,9 @@ import com.qxy.bbs.common.utils.MD5Utils;
 import com.qxy.bbs.common.utils.TokenUtils;
 import com.qxy.bbs.dao.UserDao;
 import com.qxy.bbs.dao.UserInfoDao;
+import com.qxy.bbs.domain.dto.UserDto;
 import com.qxy.bbs.domain.po.User;
+import com.qxy.bbs.domain.po.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,9 @@ public class UserService {
     @Autowired
     UserInfoDao userInfoDao;
 
+    @Autowired
+    UserInfoService userInfoService;
+
     public WebReslut regist(User user) {
         User newuser = userDao.select(user.getEmail());
         if (newuser != null) {//说明用户已经存在
@@ -36,6 +41,12 @@ public class UserService {
             String password = user.getPassword();
             user.setPassword(MD5Utils.md5(password));
             userDao.insert(user);
+            //设置userInfo的默认值
+            UserDto userDto = new UserDto();
+            userDto.setId(user.getId());
+            userDto.setEmail(user.getEmail());
+            userInfoService.selfPage(userDto);
+            log.info("用户主页更新信息成功");
             String token = TokenUtils.sign(user);
             Map<String,String> map = new HashMap<>();
             map.put("token",token);

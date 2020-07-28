@@ -1,17 +1,16 @@
-package com.qxy.bbs.domain.po;
+package com.qxy.bbs.domain.dto;
 
 import lombok.Data;
 
 import java.util.Date;
 
 /**
- * 评论回复表
- *
  * @author qixiangyang5
- * @create 2020/7/2 14:28
+ * @create 2020/7/27 20:07
  */
 @Data
-public class Reply {
+public class ReplyDto {
+
 
     private Integer id;
 
@@ -25,7 +24,7 @@ public class Reply {
     //回复的内容
     private String content;
     //回复时间
-    private Date createTime;
+    private String createTime;
     //点赞数量
     private Integer getLikeNum;
     private Integer ReplyUserId;

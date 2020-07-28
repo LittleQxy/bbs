@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qxy.bbs.dao.ReplyDao">
+
+    <insert id="insert" parameterType="com.qxy.bbs.domain.po.Reply">
+        insert into reply(userid,articleid,content,createTime,getLikeNum,articleType,commentId,replyUserId,replyUserName,userName,avtarUrl) values (
+            #{userId},#{articleId},#{content},#{createTime},#{getLikeNum},#{articleType},#{commentId},#{replyUserId},#{replyUserName},#{userName},#{avaterUrl}
+        )
+    </insert>
+
+    <select id="getReply" resultType="com.qxy.bbs.domain.po.Reply">
+        select * from reply where articleid = #{articleId} and articleType = #{articleType} and commentId = #{commentId};
+    </select>
+    
+</mapper>

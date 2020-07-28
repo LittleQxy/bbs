@@ -18,6 +18,8 @@ public class UserInfoService {
     @Autowired
     UserInfoDao userInfoDao;
 
+    @Autowired
+    RedisService redisService;
     /**
      * 个人主页的展示功能
      *
@@ -37,6 +39,8 @@ public class UserInfoService {
             userInfo.setUserId(userDto.getId());
             userInfo.setTotalArticleNum(0);
             userInfo.setGetLikeNum(0);
+            String userName = "新用户" + redisService.GetUserName();
+            userInfo.setUserName(userName);
             userInfoDao.insert(userInfo);
 
             UserInfo newUserInfo = userInfoDao.select(id);
