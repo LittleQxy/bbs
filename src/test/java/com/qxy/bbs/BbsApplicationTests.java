@@ -14,6 +14,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashMap;
 
 @SpringBootTest
 class BbsApplicationTests {
@@ -32,6 +33,7 @@ class BbsApplicationTests {
 //        System.out.println(JSONObject.parseObject(ops.get("lose").toString(),LostModule.class));
           Date date = new Date();
         System.out.println(DateUtils.changeDate(date));
+        HashMap map = new HashMap();
 
     }
 

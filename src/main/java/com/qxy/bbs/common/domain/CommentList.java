@@ -2,8 +2,6 @@ package com.qxy.bbs.common.domain;
 
 import com.qxy.bbs.domain.dto.CommentDto;
 import com.qxy.bbs.domain.dto.ReplyDto;
-import com.qxy.bbs.domain.po.Comment;
-import com.qxy.bbs.domain.po.Reply;
 import lombok.Data;
 
 import java.util.List;

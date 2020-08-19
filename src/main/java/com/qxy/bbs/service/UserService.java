@@ -7,7 +7,6 @@ import com.qxy.bbs.dao.UserDao;
 import com.qxy.bbs.dao.UserInfoDao;
 import com.qxy.bbs.domain.dto.UserDto;
 import com.qxy.bbs.domain.po.User;
-import com.qxy.bbs.domain.po.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
